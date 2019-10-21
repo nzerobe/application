@@ -1,16 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-success">
-<a class="navbar-brand" href="#" id="every">Everleaf</a>
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
-</button>
-<div class="collapse navbar-collapse" id="navbarNav">
-  <ul class="navbar-nav">
-    <li class="nav-item active">
-      <%= link_to 'Home', tasks_path, class:"nav-link", id:"every" %>
-      </ul>
-  </div>
-</nav><br/><br/>
-    </li><%= form_with(model: task, local: true) do |form| %>
+
+    </li><%= form_with(model: task, class: 'Login-form', local: true) do |form| %>
   <% if task.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(task.errors.count, "error") %> prohibited this task from being saved:</h2>
@@ -54,7 +43,9 @@
     <%= form.label :end_date %>
     <%= form.date_select :end_date %>
   </div>
-
+  <div class="field">
+    <%= form.hidden_field :user_id %>
+  </div>
   <div class="actions">
     <%= form.submit %>
   </div>

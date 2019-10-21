@@ -1,18 +1,27 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  #before before_action :authorize, except: [:inndex]
 
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.order("created_at DESC")
-    @tasks = Task.order_list(params[:sort_by])
-  if params[:search]
-    @tasks = Task.search(params[:search]).order("created_at DESC").page params[:page]
-  else
-    #@tasks = Task.order(:created_at).page(params[:page])
-    @tasks = Task.order(:created_at).page(params[:page])
+    #@tasks = Task.order("created_at DESC")
+    #@tasks = Task.order_list(params[:sort_by])
+    @tasks = if params[:term]
+      Task.where('status LIKE ? or name LIKE ?', "%#{params[:term]}%","%#{params[:term]}%").page params[:page]
+    elsif params[:term1]
+      Task.where('name LIKE ?', "%#{params[:term1]}%").page params[:page]
+    elsif params[:term2]
+      Task.where('status LIKE ?', "%#{params[:term2]}%").page params[:page]
+    else
+      #@tasks = Task.all.order('created_at desc').page params[:page]
+      @tasks = Task.order_list(params[:sort_by]).page params[:page]
+    end
   end
-end
+  def search
+    @task =task.search(params[:search])
+  end
+
   # GET /tasks/1
   # GET /tasks/1.json
   def show
@@ -21,6 +30,7 @@ end
   # GET /tasks/new
   def new
     @task = Task.new
+    @task.user_id = current_user.id
   end
 
   # GET /tasks/1/edit
@@ -31,7 +41,7 @@ end
   # POST /tasks.json
   def create
     @task = Task.new(task_params)
-
+    @task.user_id = current_user.id
     respond_to do |format|
       if @task.save
         format.html { redirect_to @task, notice: 'Task was successfully created.' }
@@ -75,6 +85,6 @@ end
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:name, :status, :content, :prior, :start_date, :end_date,:search)
+      params.require(:task).permit(:name, :status, :content, :prior, :start_date, :end_date,:search, :user_id)
     end
 end

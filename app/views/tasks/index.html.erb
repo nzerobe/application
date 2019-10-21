@@ -1,34 +1,11 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-success">
-  <a class="navbar-brand" href="#" id="every">Everleaf</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <%= link_to 'Home', tasks_path, class:"nav-link", id:"every" %>
-      </li>
-      <li class="nav-item">
-        <%= link_to 'New Task', new_task_path, class:"nav-link", id:"every" %>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="every" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Sort
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <%= link_to "Sort By Name", tasks_path(sort_by: "name"), class:'dropdown-item' %>
-          <%= link_to "Sort By Date", tasks_path(sort_by: "end_date"), class:'dropdown-item' %>
-        </div>
-      </li>
-      <%= form_tag(tasks_path, :method => "get", id: "search-form", class:"form-inline", id:"search") do %>
-        <%= text_field_tag :search, params[:search], placeholder: "Search task", class:"form-control mr-sm-2" %>
-        <%= submit_tag "Search", class:"btn btn-outline-primary my-2 my-sm-0", type:"submit", style:"color:#fff;" %>
-      <% end %>
-    </form>
-    </ul>
-  </div>
-</nav><br/><br/>
-<center>
+<%= form_tag(tasks_path, method: :get,style:'float:left;margin-right:3px', class:"form-inline") do %>
+ <%= text_field_tag :term1, params[:term1],placeholder:'  search by task name', class:"form-control mr-sm-2" %>
+ <%= submit_tag ' Search', class:"btn btn-outline-primary my-2 my-sm-0", name: nil , type:"submit", id:"every"%>
+<% end %><br/><br/>
+<%= form_tag(tasks_path, method: :get,style:"float:left;margin-right:3px", class:"form-inline") do %>
+ <%= text_field_tag :term2, params[:term2],placeholder:'  search by status', class:"form-control mr-sm-2" %>
+ <%= submit_tag 'Search', class:"btn btn-outline-primary my-2 my-sm-0", name: nil, type:"submit", id:"every" %>
+<% end %>
 <h1>Tasks</h1><br/><br/>
 
 <table class="table table-striped table-dark" id="table">
@@ -41,7 +18,9 @@
        <th scope="col">Priority</th>
         <th scope="col">Start date</th>
          <th scope="col">End date</th>
+         <th scope="col">User</th>
          <th scope="col">Action</th>
+         <th colspan="3"></th>
     </tr>
   </thead>
   <tbody>
@@ -53,6 +32,7 @@
         <td><%= task.prior %></td>
         <td><%= task.start_date %></td>
         <td><%= task.end_date %></td>
+        <td><%= task.user_id %></td>
         <td>
           <%= link_to 'Show', task, class:"btn btn-success" %>
           <%= link_to 'Edit', edit_task_path(task), class:"btn btn-primary" %>
